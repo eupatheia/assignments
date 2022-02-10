@@ -10,21 +10,24 @@
 
 int main() {
   char word[32];
-  int count;
+  unsigned long count;
   char* repeated;
 
   printf("Enter a word: ");
   scanf(" %s", word);
   printf("Enter a count: ");
-  scanf(" %d", &count);
+  scanf(" %lu", &count);
 
-  repeated = malloc(sizeof(char) * strlen(word) * count);
+  // also allocate space for null character at end
+  repeated = malloc(sizeof(char) * strlen(word) * count + 1);
   // check for successful malloc
   if (repeated == NULL) {
     printf("Cannot allocate new string.  Exiting...\n");
     exit(1);
   }
 
+  // input to strcat has to be null-terminated
+  repeated[0] = '\0';
   // new string with word repeated count times
   for (int i = 0; i < count; i++) {
     strcat(repeated, word);
