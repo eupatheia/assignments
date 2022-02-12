@@ -3,7 +3,7 @@
 // CS223 - Spring 2022
 // Identify matched braces from a given file
 // Name: Jasmine Lei
-// Date: 11 Feb 2022
+// Date: 11 February 2022
 //
 
 #include <stdio.h>
