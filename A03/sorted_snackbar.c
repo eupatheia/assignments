@@ -5,6 +5,7 @@
 // Name: Jasmine Lei
 // Date: 11 February 2022
 //
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -61,9 +62,6 @@ struct snack* insert_sorted(struct snack* snacks,
 // Delete (e.g. free) all nodes in the given list of snacks
 // Param snacks: the first node in the list (NULL if empty)
 void clear(struct snack* snacks) {
-  if (snacks == NULL) {
-    return;
-  }
   struct snack * temp = snacks;
   while (snacks != NULL) {
     temp = snacks->next;
@@ -81,21 +79,21 @@ int main() {
   struct snack * snacks = NULL;
 
   printf("Enter a number of snacks: ");
-  scanf("%d", &snack_amount);
+  scanf(" %d", &snack_amount);
 
   // fill with snacks
   for (int i = 0; i < snack_amount; i++) {
     printf("Enter a name: ");
     scanf(" %s", name);
     printf("Enter a cost: ");
-    scanf("%f", &cost);
+    scanf(" %f", &cost);
     printf("Enter a quantity: ");
-    scanf("%d", &quantity);
+    scanf(" %d", &quantity);
     snacks = insert_sorted(snacks, name, quantity, cost);
   }
 
   // print current list of snacks
-  printf("\nWelcome to the Snack Bar.\n\n");
+  printf("\nWelcome to the Sorted Snack Bar.\n\n");
   struct snack * temp = snacks;
   int i = 0;
   while (temp != NULL) {
