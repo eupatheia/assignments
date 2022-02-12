@@ -98,10 +98,10 @@ int main() {
   printf("\nWelcome to the Snack Bar.\n\n");
   struct snack * temp = snacks;
   int i = 0;
-  while (snacks != NULL) {
+  while (temp != NULL) {
     printf("%d) %-32s cost: $%-10.2f\t quantity: %d\n", i, temp->name,
         temp->cost, temp->quantity);
-    temp = snacks->next;
+    temp = temp->next;
     i++;
   }
 
