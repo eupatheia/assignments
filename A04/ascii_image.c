@@ -1,3 +1,10 @@
+/* ascii_image.c
+ * Takes a command line argument for a filename, turns the RGB values into a
+ * 2D array, and prints an ASCII image based on those values
+ * Jasmine Lei
+ * 17 February 2022
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "read_ppm.h"
@@ -30,13 +37,13 @@ void print_char(double intensity) {
 int main(int argc, char** argv) {
   struct ppm_pixel ** pixels = NULL;
   char* filename;
-  int intensity;
+  double intensity;
   int width;
   int height;
 
   if (argc != 2) {
     // wrong number of arguments
-    printf("usage: ./ <filename>\n");
+    printf("usage: ./ascii_image <filename>\n");
     exit(1);
   }
   filename = argv[1];
@@ -53,8 +60,8 @@ int main(int argc, char** argv) {
   // print ascii image pixel-by-pixel
   for (int i = 0; i < height; i++) {
     for (int j = 0; j < width; j++) {
-      intensity = (1.0 / 3) * (pixels[i][j].red + pixels[i][j].green +
-          pixels[i][j].blue);
+      intensity = (pixels[i][j].red + pixels[i][j].green +
+          pixels[i][j].blue) / 3.0;
       print_char(intensity);
     }
     printf("\n");

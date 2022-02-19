@@ -1,3 +1,9 @@
+/* test_ppm.c
+ * Tests read_ppm.c using a hard-coded file name, "feep-ascii.ppm"
+ * Jasmine Lei
+ * 17 February 2022
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "read_ppm.h"

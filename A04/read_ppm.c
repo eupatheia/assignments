@@ -1,6 +1,6 @@
 /* read_ppm.c
  * Reads in a PPM file with ASCII values and returns a 2D array of struct
- * ppm_pixel
+ * ppm_pixel that stores RGB values
  * Jasmine Lei
  * 17 February 2022
  */
@@ -13,8 +13,8 @@
 struct ppm_pixel** read_ppm(const char* filename, int* width, int* height) {
   FILE* file;
   char word[100];
+  char temp[50];
   struct ppm_pixel ** pixels = NULL;
-  unsigned char r, g, b;
 
   file = fopen(filename, "r");
   if (file == NULL) {
@@ -22,13 +22,13 @@ struct ppm_pixel** read_ppm(const char* filename, int* width, int* height) {
   }
 
   // check for correct format
-  fgets(word, 3, file);
-  if (strcmp(word, "P3") != 0) {
+  fgets(word, 100, file);
+  sscanf(word, "%s ", temp);
+  if (strcmp(temp, "P3") != 0) {
     printf("Error: not an ASCII ppm file.\n");
     return NULL;
   }
   // check that dimensions match the arguments
-  fgets(word, 100, file);
   fgets(word, 100, file);
   // skip over comments
   while (word[0] == '#') {
@@ -50,12 +50,11 @@ struct ppm_pixel** read_ppm(const char* filename, int* width, int* height) {
     }
   }
 
+  // populate array values
   for (int i = 0; i < *height; i++) {
     for (int j = 0; j < *width; j++) {
-      fscanf(file, " %hhu %hhu %hhu", &r, &g, &b);
-      pixels[i][j].red = r;
-      pixels[i][j].green = g;
-      pixels[i][j].blue = b;
+      fscanf(file, " %hhu %hhu %hhu", &pixels[i][j].red, &pixels[i][j].green,
+          &pixels[i][j].blue);
     }
   }
 
