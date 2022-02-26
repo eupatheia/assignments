@@ -90,4 +90,5 @@ extern void write_ppm(const char* filename, struct ppm_pixel** pxs, int w, int h
       fwrite(pxs[i][j].colors, 1, 3, file);
     }
   }
+fclose(file);
 }
