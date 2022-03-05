@@ -1,3 +1,10 @@
+/* decode.c
+ * Reads a ppm file and outputs the message stored in the least
+ * significant bits of each color
+ * Jasmine Lei
+ * 04 March 2022
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -12,7 +19,6 @@ int main(int argc, char** argv) {
   int j = 0;  // column counter
   int k = 0;  // color counter
   int num = 0;
-  char ch = '1';
 
   if (argc != 2) {
     // wrong number of arguments
@@ -23,11 +29,11 @@ int main(int argc, char** argv) {
 
   // attempt to read ppm file into a 2D array
   pixels = read_ppm(filename, &width, &height);
-  printf("Reading %s with width %d and height %d\n", filename, width, height);
   if (pixels == NULL) {
     printf("Error: failed read from file.  Exiting...\n");
     exit(1);
   }
+  printf("Reading %s with width %d and height %d\n", filename, width, height);
   printf("Max number of characters in the image: %d\n", ((width * height * 3) / 8));
 
   // read least significant bits pixel-by-pixel, color by color,
@@ -41,7 +47,6 @@ int main(int argc, char** argv) {
     if (bit_counter == 7) {
       if (num != '\0') {
         printf("%c", num);
-        ch = num;
         num = 0;
         bit_counter = 0;
       } else {

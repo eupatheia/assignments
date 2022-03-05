@@ -1,3 +1,10 @@
+/* encode.c
+ * Reads a binary ppm file and embeds a user-defined message in
+ * the least significant bits
+ * Jasmine Lei
+ * 04 March 2022
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -24,11 +31,11 @@ int main(int argc, char** argv) {
 
   // attempt to read ppm file into a 2D array
   pixels = read_ppm(filename, &width, &height);
-  printf("Reading %s with width %d and height %d\n", filename, width, height);
   if (pixels == NULL) {
     printf("Error: failed read from file.  Exiting...\n");
     exit(1);
   }
+  printf("Reading %s with width %d and height %d\n", filename, width, height);
   // max number of characters, not including the null char at end
   max = (width * height * 3) / 8;
   printf("Max number of non-null characters in the image: %d\n", max - 1);
