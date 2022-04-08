@@ -72,8 +72,8 @@ int main(int argc, char* argv[]) {
   // compute image
   for (int i = 0; i < size; i++) {
     for (int j = 0; j < size; j++) {
-      xfrac = (float) i / size;
-      yfrac = (float) j / size;
+      xfrac = (float) j / size;
+      yfrac = (float) i / size;
       x0 = xmin + xfrac * (xmax - xmin);
       y0 = ymin + yfrac * (ymax - ymin);
 
@@ -84,15 +84,15 @@ int main(int argc, char* argv[]) {
         xtmp = x*x - y*y + x0;
         y = 2*x*y + y0;
         x = xtmp;
-	iter++;
+	      iter++;
       }
       if (iter < maxIterations) {
         // escaped
-	pixels[i][j].red = palette[iter].red;
-	pixels[i][j].green = palette[iter].green;
-	pixels[i][j].blue = palette[iter].blue;
+	      pixels[i][j].red = palette[iter].red;
+	      pixels[i][j].green = palette[iter].green;
+	      pixels[i][j].blue = palette[iter].blue;
       } else {
-	// did not escape, use color black
+	      // did not escape, use color black
         pixels[i][j].red = 0;
         pixels[i][j].green = 0;
         pixels[i][j].blue = 0;
