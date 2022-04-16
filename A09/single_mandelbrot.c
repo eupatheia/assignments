@@ -4,6 +4,7 @@
 #include <time.h>
 #include <sys/time.h>
 #include "read_ppm.h"
+#include "single_mandelbrot.h"
 
 int main(int argc, char* argv[]) {
   int size = 480;
@@ -14,9 +15,6 @@ int main(int argc, char* argv[]) {
   int maxIterations = 1000;
   struct ppm_pixel ** pixels = NULL;
   struct ppm_pixel * palette = NULL;
-  unsigned int basered, basegreen, baseblue;
-  float xfrac, yfrac, x0, y0, x, y, xtmp;
-  int iter;
   double timer;
   struct timeval tstart, tend;
   char new_file[100];
@@ -57,46 +55,15 @@ int main(int argc, char* argv[]) {
     printf("Error: failed malloc.  Exiting...\n");
     exit(1);
   }
-  srand(time(0));
-  basered = rand() % 255;
-  basegreen = rand() % 255;
-  baseblue = rand() % 255;
-  for (int i = 0; i < maxIterations; i++) {
-    palette[i].red = basered + rand() % 100 - 50;
-    palette[i].green = basegreen + rand() % 100 - 50;
-    palette[i].blue = baseblue + rand() % 100 - 50;
-  }
+  generatePalette(palette, maxIterations);
 
   gettimeofday(&tstart, NULL);
 
   // compute image
   for (int i = 0; i < size; i++) {
     for (int j = 0; j < size; j++) {
-      xfrac = (float) j / size;
-      yfrac = (float) i / size;
-      x0 = xmin + xfrac * (xmax - xmin);
-      y0 = ymin + yfrac * (ymax - ymin);
-
-      x = 0;
-      y = 0;
-      iter = 0;
-      while (iter < maxIterations && x*x + y*y < 2*2) {
-        xtmp = x*x - y*y + x0;
-        y = 2*x*y + y0;
-        x = xtmp;
-	      iter++;
-      }
-      if (iter < maxIterations) {
-        // escaped
-	      pixels[i][j].red = palette[iter].red;
-	      pixels[i][j].green = palette[iter].green;
-	      pixels[i][j].blue = palette[iter].blue;
-      } else {
-	      // did not escape, use color black
-        pixels[i][j].red = 0;
-        pixels[i][j].green = 0;
-        pixels[i][j].blue = 0;
-      }
+      computeMandelbrot(size, i, j, xmin, xmax, ymin, ymax, maxIterations,
+          pixels, palette);
     }
   }
 
@@ -121,4 +88,54 @@ int main(int argc, char* argv[]) {
   palette = NULL;
 
   return 0;
+}
+
+// generate palette colors
+void generatePalette(struct ppm_pixel * palette, int maxIterations) {
+  unsigned int basered, basegreen, baseblue;
+  srand(time(0));
+
+  basered = rand() % 255;
+  basegreen = rand() % 255;
+  baseblue = rand() % 255;
+  for (int i = 0; i < maxIterations; i++) {
+    palette[i].red = basered + rand() % 100 - 50;
+    palette[i].green = basegreen + rand() % 100 - 50;
+    palette[i].blue = baseblue + rand() % 100 - 50;
+  }
+}
+
+// compute mandelbrot set
+void computeMandelbrot(int size, int i, int j, float xmin, float xmax,
+    float ymin, float ymax, int maxIterations, struct ppm_pixel ** pixels,
+    struct ppm_pixel * palette) {
+
+  float xfrac, yfrac, x0, y0, x, y, xtmp;
+  int iter;
+
+  xfrac = (float) j / size;
+  yfrac = (float) i / size;
+  x0 = xmin + xfrac * (xmax - xmin);
+  y0 = ymin + yfrac * (ymax - ymin);
+
+  x = 0;
+  y = 0;
+  iter = 0;
+  while (iter < maxIterations && x*x + y*y < 2*2) {
+    xtmp = x*x - y*y + x0;
+    y = 2*x*y + y0;
+    x = xtmp;
+    iter++;
+  }
+  if (iter < maxIterations) {
+    // escaped
+    pixels[i][j].red = palette[iter].red;
+    pixels[i][j].green = palette[iter].green;
+    pixels[i][j].blue = palette[iter].blue;
+  } else {
+    // did not escape, use color black
+    pixels[i][j].red = 0;
+    pixels[i][j].green = 0;
+    pixels[i][j].blue = 0;
+  }
 }
