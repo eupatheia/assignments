@@ -8,7 +8,7 @@
 #include <sys/shm.h>
 #include <sys/ipc.h>
 #include "read_ppm.h"
-#include "single_mandelbrot.h"
+#include "mandelbrot_functions.h"
 
 void getCoordinates(int i, int size, int * start_col, int * end_col,
     int * start_row, int * end_row);
