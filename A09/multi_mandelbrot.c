@@ -39,6 +39,7 @@ int main(int argc, char* argv[]) {
       case 'r': xmax = atof(optarg); break;
       case 't': ymax = atof(optarg); break;
       case 'b': ymin = atof(optarg); break;
+      case 'p': numProcesses = atof(optarg); break;
       case '?': printf("usage: %s -s <size> -l <xmin> -r <xmax> "
         "-b <ymin> -t <ymax> -p <numProcesses>\n", argv[0]); break;
     }
@@ -95,7 +96,7 @@ int main(int argc, char* argv[]) {
   gettimeofday(&tstart, NULL);
 
   // compute image
-  for (int i = 0; i < 4; i++) {
+  for (int i = 0; i < numProcesses; i++) {
     int pid = fork();
     if (pid == 0) {
       getCoordinates(i, size, &start_col, &end_col, &start_row, &end_row);
@@ -116,7 +117,7 @@ int main(int argc, char* argv[]) {
   }
 
   // wait for all child processes to complete
-  for (int i = 0; i < 4; i++) {
+  for (int i = 0; i < numProcesses; i++) {
     int status;
     int pid = wait(&status);
     printf("Child process complete: %d\n", pid);
