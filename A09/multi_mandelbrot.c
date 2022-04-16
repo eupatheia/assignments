@@ -169,7 +169,7 @@ void getCoordinates(int i, int size, int * start_col, int * end_col,
     *end_row = size / 2;
   } else if (i == 1) {
     // top right
-    *start_col = (size / 2) + 1;
+    *start_col = size / 2;
     *end_col = size;
     *start_row = 0;
     *end_row = size / 2;
@@ -177,13 +177,13 @@ void getCoordinates(int i, int size, int * start_col, int * end_col,
     // bottom left
     *start_col = 0;
     *end_col = size / 2;
-    *start_row = (size / 2) + 1;
+    *start_row = size / 2;
     *end_row = size;
   } else {
     // bottom right
-    *start_col = (size / 2) + 1;
+    *start_col = size / 2;
     *end_col = size;
-    *start_row = (size / 2) + 1;
+    *start_row = size / 2;
     *end_row = size;
   }
 }
