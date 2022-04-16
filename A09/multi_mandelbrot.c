@@ -99,7 +99,7 @@ int main(int argc, char* argv[]) {
     int pid = fork();
     if (pid == 0) {
       getCoordinates(i, size, &start_col, &end_col, &start_row, &end_row);
-      printf("%d) Sub-image block: cols (%d, %d) to rows (%d, %d)\n", pid,
+      printf("%d) Sub-image block: cols (%d, %d) to rows (%d, %d)\n", getpid(),
           start_col, end_col, start_row, end_row);
       for (int i = start_row; i < end_row; i++) {
         for (int j = start_col; j < end_col; j++) {
@@ -107,6 +107,8 @@ int main(int argc, char* argv[]) {
               pixels, palette);
         }
       }
+      free(shmids);
+      shmids = NULL;
       exit(0);
     } else {
       printf("Launched child process: %d\n", pid);
