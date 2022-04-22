@@ -74,7 +74,7 @@ void computeCounts(int size, int start_row, int end_row, int start_col,
           x = xtmp;
 
           yrow = round(size * (y - ymin) / (ymax - ymax));
-          xcol = round(size * (x - xmin) / (xmax - xmax
+          xcol = round(size * (x - xmin) / (xmax - xmax));
           printf("%d\n", yrow);
           printf("%d\n", xcol);
           if (yrow < 0 || yrow >= size) {
