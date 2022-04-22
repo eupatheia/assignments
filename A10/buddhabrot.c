@@ -57,7 +57,7 @@ void computeCounts(int size, int start_row, int end_row, int start_col,
 
   for (int i = start_row; i < end_row; i++) {
     for (int j = start_col; j < end_col; j++) {
-      if (in_set[i][j]) {
+      if (in_set[i][j] == 1) {
         continue;
       } else {
         xfrac = (float) j / size;
@@ -83,13 +83,12 @@ void computeCounts(int size, int start_row, int end_row, int start_col,
 
           pthread_mutex_lock(&mutex);
           counts[xcol][yrow]++;
-          pthread_mutex_unlock(&mutex);
-
           // update max count
           if (counts[xcol][yrow] > max) {
             max = counts[xcol][yrow];
           }
-        }
+          pthread_mutex_unlock(&mutex);
+	}
       }
     }
   }
