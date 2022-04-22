@@ -106,6 +106,7 @@ void computeColors(int start_row, int end_row, int start_col, int end_col,
     for (int j = start_col; j < end_col; j++) {
       value = 0;
       if (counts[i][j] > 0) {
+        printf("adding color\n");
         value = log(counts[i][j]) / log(max_count);
         value = pow(value, factor);
       }
