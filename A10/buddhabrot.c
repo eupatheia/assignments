@@ -268,6 +268,11 @@ int main(int argc, char* argv[]) {
       exit(1);
     }
   }
+  for (int i = 0; i < size; i++) {
+    for (int j = 0; j < size; j++) {
+      counts[i][j] = 0;
+    }
+  }
 
   // initialize barrier and mutex
   ret1 = pthread_barrier_init(&barrier, NULL, 4);
