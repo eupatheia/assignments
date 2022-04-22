@@ -47,8 +47,8 @@ void computeMembership(int size, int start_row, int end_row, int start_col,
   }
 }
 
-// Step 2: Compute visited counts, return max
-int computeCounts(int size, int start_row, int end_row, int start_col,
+// Step 2: Compute visited counts 
+void computeCounts(int size, int start_row, int end_row, int start_col,
     int end_col, float xmin, float xmax, float ymin, float ymax,
     int ** in_set, int ** counts) {
 
@@ -271,7 +271,7 @@ int main(int argc, char* argv[]) {
   }
 
   // initialize barrier and mutex
-  ret1 = pthread_barrier_init(&barrier);
+  ret1 = pthread_barrier_init(&barrier, NULL, 4);
   if (ret1) {
     printf("ERROR: pthread_barrier_init failed\n");
     exit(0);
@@ -338,7 +338,7 @@ int main(int argc, char* argv[]) {
   counts = NULL;
 
   // destroy barrier and mutex
-  pthread_barrier_destroy(&barrier)
+  pthread_barrier_destroy(&barrier);
   pthread_mutex_destroy(&mutex);
 
   return 0;
