@@ -100,13 +100,12 @@ void computeColors(int start_row, int end_row, int start_col, int end_col,
 
   float gamma = 0.681;
   float factor = 1.0 / gamma;
-  int value;
+  float value;
 
   for (int i = start_row; i < end_row; i++) {
     for (int j = start_col; j < end_col; j++) {
       value = 0;
       if (counts[i][j] > 0) {
-        printf("adding color\n");
         value = log(counts[i][j]) / log(max_count);
         value = pow(value, factor);
       }
