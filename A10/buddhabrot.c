@@ -50,10 +50,10 @@ void computeMembership(int size, int start_row, int end_row, int start_col,
 // Step 2: Compute visited counts
 void computeCounts(int size, int start_row, int end_row, int start_col,
     int end_col, float xmin, float xmax, float ymin, float ymax,
-    int ** in_set, int ** counts) {
+    int * max_count, int ** in_set, int ** counts) {
 
   float xfrac, yfrac, x0, y0, x, y, xtmp;
-  int yrow, xcol, max = 0;
+  int yrow, xcol;
 
   for (int i = start_row; i < end_row; i++) {
     for (int j = start_col; j < end_col; j++) {
@@ -84,8 +84,8 @@ void computeCounts(int size, int start_row, int end_row, int start_col,
 	  pthread_mutex_lock(&mutex);
           counts[yrow][xcol]++;
           // update max count
-          if (counts[yrow][xcol] > max) {
-            max = counts[yrow][xcol];
+          if (counts[yrow][xcol] > *max_count) {
+            *max_count = counts[yrow][xcol];
           }
           pthread_mutex_unlock(&mutex);
 	      }
@@ -96,17 +96,18 @@ void computeCounts(int size, int start_row, int end_row, int start_col,
 
 // Step 3: Compute colors
 void computeColors(int start_row, int end_row, int start_col, int end_col,
-    int max_count, int ** counts, struct ppm_pixel ** pixels) {
+    int * max_count, int ** counts, struct ppm_pixel ** pixels) {
 
   float gamma = 0.681;
   float factor = 1.0 / gamma;
-  float value;
 
   for (int i = start_row; i < end_row; i++) {
     for (int j = start_col; j < end_col; j++) {
-      value = 0;
+      float value = 0;
       if (counts[i][j] > 0) {
-        value = log(counts[i][j]) / log(max_count);
+        printf("%d\n", *max_count);
+        printf("%d\n", counts[i][j]);
+	value = log(counts[i][j]) / log(*max_count);
         value = pow(value, factor);
       }
       pixels[i][j].red = value * 255;
@@ -161,7 +162,7 @@ struct thread_data {
   struct ppm_pixel ** pixels;
   int ** in_set;
   int ** counts;
-  int max_count;  // largest count at a coordinate from counts
+  int * max_count;  // largest count at a coordinate from counts
 };
 
 void * thread_function(void * args) {
@@ -175,7 +176,7 @@ void * thread_function(void * args) {
 
   computeCounts(data->size, data->start_row, data->end_row, data->start_col,
       data->end_col, data->xmin, data->xmax, data->ymin, data->ymax,
-      data->in_set, data->counts);
+      data->max_count, data->in_set, data->counts);
 
   // wait for all threads before computing colors
   pthread_barrier_wait(&barrier);
@@ -209,6 +210,7 @@ int main(int argc, char* argv[]) {
   pthread_t threads[4];
   struct thread_data data[4];
   int ret1, ret2;  // for error checking
+  int max_count = 0;
 
   int opt;
   while ((opt = getopt(argc, argv, ":s:l:r:t:b:p:")) != -1) {
@@ -305,7 +307,7 @@ int main(int argc, char* argv[]) {
     data[i].pixels = pixels;
     data[i].in_set = in_set;
     data[i].counts = counts;
-    data[i].max_count = 0;
+    data[i].max_count = &max_count;
     // create threads
     pthread_create(&threads[i], NULL, thread_function, (void *) &data[i]);
   }
