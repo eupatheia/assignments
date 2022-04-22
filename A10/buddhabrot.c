@@ -47,7 +47,7 @@ void computeMembership(int size, int start_row, int end_row, int start_col,
   }
 }
 
-// Step 2: Compute visited counts 
+// Step 2: Compute visited counts
 void computeCounts(int size, int start_row, int end_row, int start_col,
     int end_col, float xmin, float xmax, float ymin, float ymax,
     int ** in_set, int ** counts) {
@@ -82,13 +82,13 @@ void computeCounts(int size, int start_row, int end_row, int start_col,
           }
 
           pthread_mutex_lock(&mutex);
-          counts[xcol][yrow]++;
+          counts[yrow][xcol]++;
           // update max count
-          if (counts[xcol][yrow] > max) {
-            max = counts[xcol][yrow];
+          if (counts[yrow][xcol] > max) {
+            max = counts[yrow][xcol];
           }
           pthread_mutex_unlock(&mutex);
-	}
+	      }
       }
     }
   }
