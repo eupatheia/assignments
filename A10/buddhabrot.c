@@ -68,12 +68,15 @@ void computeCounts(int size, int start_row, int end_row, int start_col,
         x = 0;
         y = 0;
         while (x*x + y*y < 2*2) {
+          printf("1\n");
           xtmp = x*x - y*y + x0;
           y = 2*x*y + y0;
           x = xtmp;
 
           yrow = round(size * (y - ymin) / (ymax - ymax));
-          xcol = round(size * (x - xmin) / (xmax - xmax));
+          xcol = round(size * (x - xmin) / (xmax - xmax
+          printf("%d\n", yrow);
+          printf("%d\n", xcol);
           if (yrow < 0 || yrow >= size) {
             continue; // out of range
           }
@@ -82,6 +85,7 @@ void computeCounts(int size, int start_row, int end_row, int start_col,
           }
 
           pthread_mutex_lock(&mutex);
+          printf("inc\n");
           counts[yrow][xcol]++;
           // update max count
           if (counts[yrow][xcol] > max) {
